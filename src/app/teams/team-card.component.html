@@ -1,0 +1,23 @@
+<md-card>
+  <md-card-header>
+    <md-card-title>
+      {{team.name}}
+    </md-card-title>
+    <md-card-subtitle>
+      {{team.coach}}
+    </md-card-subtitle>
+    <div md-card-avatar [ngStyle]="{'background-color': team.color}" class="team-avatar">{{team.abbreviation}}</div>
+  </md-card-header>
+  <div md-card-image class="team-color" [ngStyle]="{'background-color': team.color}" style="display: flex; justify-content: center; align-items: center; height: 140px;">
+      <md-icon *ngIf="team.league === 'Stripes'; else solidIcon" style="color: white; height: 48px; width: 48px; font-size: 48px;">clear_all</md-icon>
+      <ng-template #solidIcon>
+        <md-icon style="color: white; height: 48px; width: 48px; font-size: 48px;">stop</md-icon>
+      </ng-template>
+      <span style="color: white;">{{team.league}} League</span>
+  </div>
+  <md-card-content></md-card-content>
+  <md-card-actions>
+    <button md-button (click)="displayRoster(team.roster)">ROSTER</button>
+    <button md-button>UPCOMING GAMES</button>
+  </md-card-actions>
+</md-card>
