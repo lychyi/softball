@@ -1,3 +1,48 @@
-<p>
-  schedule works!
-</p>
+<div *ngIf="scheduleLoading$ | async" style="background-color: rgba(255,255,255,0.4); display: flex; justify-content: center; align-items: center; height: 100vh" class="progress-spinner-container">
+  <md-progress-spinner style="height: 48px; width: 48px;" [color]="'primary'" [mode]="'indeterminate'"></md-progress-spinner>
+</div>
+<md-toolbar>
+  <form [formGroup]="teamFilterFormGroup" class="team-filter-form">
+    <md-select placeholder="Filter by team" formControlName="filter" (change)="filterSchedule($event.value)">
+      <md-option [value]="''">All Teams</md-option>
+      <md-option *ngFor="let team of teams$ | async" [value]="team.name">{{team.name}}</md-option>
+    </md-select>  
+  </form>
+</md-toolbar>
+<br>
+<div style="text-align: center; margin: 0 auto;">
+  <button md-raised-button (click)="scrollTo()" color="primary">{{'Jump to Next Game' | uppercase}}</button>  
+</div>
+
+<div *ngFor="let date of scheduleDates$ | async">
+  <h3 [attr.id]="date | replace:'/':'-'" class="schedule-date">{{date | date: 'EEEE'}}, {{date}}</h3>
+  <md-card *ngFor="let game of scheduleGroupByDates$.pluck(date) | async">
+    <md-card-subtitle>{{game.datetime | date: 'h'}}P {{game.location | uppercase}}</md-card-subtitle>
+    <md-card-content>
+      <table style="padding: 0px; margin: 0 auto;">
+        <tr>
+          <td class="home team-cell">
+            <div md-card-avatar [ngStyle]="{'background-color': game.away.color}">
+              <md-icon *ngIf="game.away.league === 'Stripes'">clear_all</md-icon> 
+              <md-icon *ngIf="game.away.league === 'Solids'">stop</md-icon>  
+            </div>
+            <p>{{game.away.name}}</p>
+          </td>
+          <td style="width: 15px; color: #999;">@</td>
+          <td class="away team-cell">
+            <div md-card-avatar [ngStyle]="{'background-color': game.home.color}">
+              <md-icon *ngIf="game.home.league === 'Stripes'">clear_all</md-icon> 
+              <md-icon *ngIf="game.home.league === 'Solids'">stop</md-icon>  
+            </div>
+            <p>{{game.home.name}}</p>
+          </td>
+        </tr>
+      </table>
+      <br>
+      <div class="game-results">
+        <h4 *ngIf="game.result.toString() !== ''">Result</h4>
+        <p>{{game.result.toString()}}</p>  
+      </div>
+    </md-card-content>
+  </md-card>
+</div>

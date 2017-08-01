@@ -18,6 +18,6 @@
   <md-card-content></md-card-content>
   <md-card-actions>
     <button md-button (click)="displayRoster(team.roster)">ROSTER</button>
-    <button md-button>UPCOMING GAMES</button>
+    <button md-button (click)="viewUpcomingGamesForTeam(team.name)">SCHEDULE</button>
   </md-card-actions>
 </md-card>

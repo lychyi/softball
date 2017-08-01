@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 
+import { Observable } from 'rxjs/Rx';
+import 'rxjs/add/operator/map';
+
 import { Sandbox } from '../shared/sandbox/base.sandbox';
 import { TeamsService } from '../shared/async/teams.service';
 
@@ -21,39 +24,19 @@ export class TeamsSandboxService extends Sandbox {
     super(appState$);
   }
 
+  // Loads teams into the store
   public loadTeams(): void {
     this.appState$.dispatch(new teamActions.LoadAction());
 
-    this.ts.getTeams()
-      .subscribe((res) => {
-        const teams: Team[] = [];
-
-        res.json().forEach((team, index) => {
-          teams.push(new Team({
-            id: index,
-            name: team.name,
-            coach: team.coach,
-            color: team.color,
-            league: team.league,
-            abbreviation: team.shortName,
-            roster: this._parseRoster(team.roster)
-          }));
-        });
-
-        this.appState$.dispatch(new teamActions.LoadSuccessAction(teams));
-      },
-      (err) => {
-        this.appState$.dispatch(new teamActions.LoadFailAction());
-      }
-    );
-  }
-
-  // Parses the data back from the service and creates new TeamMember instances
-  private _parseRoster(roster: any) {
-    const keys = Object.keys(roster);
-
-    return keys.map((key) => {
-      return new TeamMember(roster[key]);
-    });
+    // Refactor this to an ngrx effects service
+    // Is this taken care of in effects?
+    // this.ts.getTeams()
+    //   .subscribe(teams => {
+    //     this.appState$.dispatch(new teamActions.LoadSuccessAction(teams));
+    //   },
+    //   (err) => {
+    //     this.appState$.dispatch(new teamActions.LoadFailAction());
+    //   }
+    // );
   }
 }

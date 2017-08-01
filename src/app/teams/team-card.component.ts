@@ -10,10 +10,15 @@ import { Team, TeamMember } from './team.model';
 export class TeamCardComponent {
   @Input() team: Team;
   @Output() onViewRoster = new EventEmitter<TeamMember[]>();
+  @Output() onViewUpcoming = new EventEmitter<string>();
 
   constructor() { }
 
   displayRoster(roster: TeamMember[]) {
     this.onViewRoster.emit(roster);
+  }
+
+  viewUpcomingGamesForTeam(name: string) {
+    this.onViewUpcoming.emit(name);
   }
 }

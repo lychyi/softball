@@ -7,11 +7,20 @@ import { ScheduleComponent } from './schedule/schedule.component';
 import { StandingsComponent } from './standings/standings.component';
 import { TeamsComponent } from './teams/teams.component';
 
+// Resolvers
+import { TeamsResolver } from './teams/teams-resolver';
+
 const appRoutes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent },
-  { path: 'schedule', component: ScheduleComponent },
-  { path: 'standings', component: StandingsComponent },
+  {
+    path: 'schedule',
+    component: ScheduleComponent,
+    resolve: {
+      teams: TeamsResolver
+    }
+  },
+  // { path: 'standings', component: StandingsComponent },
   { path: 'teams', component: TeamsComponent }
 ];
 
@@ -22,7 +31,10 @@ const appRoutes: Routes = [
   exports: [
     RouterModule
   ],
-  declarations: []
+  declarations: [],
+  providers: [
+    TeamsResolver
+  ]
 })
 
 export class AppRoutingModule { }

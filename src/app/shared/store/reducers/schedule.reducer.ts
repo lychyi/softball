@@ -1,17 +1,22 @@
-import * as actions from '../actions/teams.actions';
-import { Team } from '../../../teams/team.model';
+import * as moment from 'moment';
+import { groupBy } from 'lodash';
+
+import * as actions from '../actions/schedule.actions';
+import { Game } from '../../../schedule/game-model';
 
 export interface State {
   loading: boolean;
   loaded: boolean;
   failed: boolean;
-  results: Team[];
+  results: Game[];
+  filter: string;
 }
 
 const INITIAL_STATE: State = {
   loading: false,
   loaded: false,
   failed: false,
+  filter: '',
   results: []
 };
 
@@ -36,7 +41,6 @@ export function reducer(state = INITIAL_STATE, action: actions.Actions): State {
         results: action.payload
       };
     }
-
     case actions.ActionTypes.LOAD_FAILED: {
       return {
         ...state,
@@ -46,9 +50,14 @@ export function reducer(state = INITIAL_STATE, action: actions.Actions): State {
         results: []
       };
     }
+    case actions.ActionTypes.FILTER: {
+      return {
+        ...state,
+        filter: action.payload
+      };
+    }
     default: {
       return state;
     }
   }
 }
-

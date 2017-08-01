@@ -2,4 +2,9 @@
   <md-progress-spinner style="height: 48px; width: 48px;" [color]="'primary'" [mode]="'indeterminate'"></md-progress-spinner>
 </div>
 
-<app-team-card *ngFor="let team of teams$ | async" [team]="team" (onViewRoster)="openRosterDialog(team.name, $event)"></app-team-card>
+<app-team-card 
+  *ngFor="let team of teams$ | async" 
+  [team]="team" 
+  (onViewRoster)="openRosterDialog(team.name, $event)"
+  (onViewUpcoming)="viewUpcomingGames(team.name)"
+></app-team-card>
