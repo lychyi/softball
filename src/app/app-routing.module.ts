@@ -11,7 +11,7 @@ import { TeamsComponent } from './teams/teams.component';
 import { TeamsResolver } from './teams/teams-resolver';
 
 const appRoutes: Routes = [
-  { path: '', redirectTo: '/home', pathMatch: 'full' },
+  { path: '', redirectTo: '/schedule', pathMatch: 'full' },
   { path: 'home', component: HomeComponent },
   {
     path: 'schedule',
@@ -20,7 +20,7 @@ const appRoutes: Routes = [
       teams: TeamsResolver
     }
   },
-  // { path: 'standings', component: StandingsComponent },
+  { path: 'standings', component: StandingsComponent },
   { path: 'teams', component: TeamsComponent }
 ];
 

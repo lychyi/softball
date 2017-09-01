@@ -1,23 +1,27 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MaterialModule, MdToolbarModule } from '@angular/material';
+
+import { MdSelectModule, MdButtonModule } from '@angular/material';
+
+import { SpinnerModule } from '../shared/components/spinner.module';
 
 import { HomeSandbox } from './home.sandbox';
 import { HomeComponent } from './home.component';
-import { TeamsService } from '../shared/async/teams.service';
 
+import { CookieService } from 'angular2-cookie/services/cookies.service';
 @NgModule({
   imports: [
     CommonModule,
-    MaterialModule,
-    MdToolbarModule
+    SpinnerModule,
+    MdSelectModule,
+    MdButtonModule
   ],
   declarations: [
     HomeComponent
   ],
   providers: [
     HomeSandbox,
-    TeamsService
+    CookieService
   ]
 })
 export class HomeModule { }

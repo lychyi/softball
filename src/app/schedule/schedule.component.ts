@@ -2,7 +2,6 @@ import { Component, OnInit, ChangeDetectionStrategy, Inject } from '@angular/cor
 import { DOCUMENT } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { FormControl, FormGroup } from '@angular/forms';
-import { MdCard } from '@angular/material';
 
 import { groupBy } from 'lodash';
 import * as moment from 'moment';
@@ -27,16 +26,17 @@ import { GameResult } from './game-result-model';
 })
 
 export class ScheduleComponent implements OnInit {
-  public schedule$: Observable<Game[]> = this.sandbox.schedule$;
-  public scheduleDates$: Observable<any> = this.sandbox.scheduleDates$;
-  public scheduleGroupByDates$: Observable<any> = this.sandbox.scheduleGroupByDates$;
   public scheduleLoading$: Observable<Boolean> = this.sandbox.scheduleLoading$;
   public scheduleLoaded$: Observable<Boolean> = this.sandbox.scheduleLoaded$;
-  public filter$: Observable<String> = this.sandbox.filter$;
+  public scheduleFiltered$: Observable<Game[]> = this.sandbox.scheduleFiltered$;
+  public filterTerm$: Observable<String> = this.sandbox.filterTerm$;
   public teams$: Observable<Team[]> = this.teamsSandbox.teams$;
-  public nextGameDate$: Observable<string> = this.sandbox.nextGameDate$;
+
+  public displaySchedule$: Observable<Game[]>;
+  public displayScheduleDates$: Observable<string[]>;
 
   public teamFilterFormGroup: FormGroup;
+  public nextGameDate: string;
 
   constructor(
     public route: ActivatedRoute,
@@ -61,35 +61,49 @@ export class ScheduleComponent implements OnInit {
 
   ngOnInit() {
     this.sandbox.loadSchedule();
-    // get rid of other sandboxes here, sandboxes should communicate in sandboxes
     this.teamsSandbox.loadTeams();
 
-    // Initialize new form group
+    this.displaySchedule$ = this.scheduleFiltered$.map(schedule => {
+      return groupBy(schedule, (game) => {
+        return moment(game.datetime).format('M/DD/YY');
+      });
+    });
+
+    this.displayScheduleDates$ = this.scheduleFiltered$.map(schedule => {
+      const today = new Date();
+      const dates = Object.keys(groupBy(schedule, (game) => {
+        return moment(game.datetime).format('M/DD/YY');
+      }));
+
+      // Calculate the next date that a game is on
+      for (let i = 0; i < dates.length; i++) {
+        if (today < new Date(dates[i])) {
+          this.nextGameDate = dates[i];
+          break;
+        }
+      }
+      return dates;
+    });
+
     this.teamFilterFormGroup = new FormGroup({
       filter: new FormControl('')
     });
 
-    this.filter$.subscribe(filter => {
-      if (filter.length) {
-        this.teamFilterFormGroup.patchValue({filter: filter});
-        this.filterSchedule(filter);
+    // Keeps the filter select mechanism in sync with the state's filter term
+    this.filterTerm$.subscribe(term => {
+      if (term.length) {
+        this.teamFilterFormGroup.patchValue({filter: term});
+        this.sandbox.filterSchedule(term);
       }
     });
   }
 
-  public filterSchedule(name) {
-    this.sandbox.filterSchedule(name);
-  }
-
-  public scrollTo(): void {
-    this.nextGameDate$.subscribe(date => {
-      console.log(date.replace(/\//g, '-'));
-      const pageScrollInstance: PageScrollInstance =
-        PageScrollInstance.newInstance({
-          document: this.document,
-          scrollTarget: '#' + date.replace(/\//g, '-')
-        });
-      this.pss.start(pageScrollInstance);
-    });
+  public scrollToNextDate(): void {
+    const pageScrollInstance: PageScrollInstance =
+      PageScrollInstance.newInstance({
+        document: this.document,
+        scrollTarget: '#' + this.nextGameDate.replace(/\//g, '-')
+      });
+    this.pss.start(pageScrollInstance);
   }
 }

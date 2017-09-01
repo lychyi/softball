@@ -1,3 +1,12 @@
-<p>
-  {{ teams$ | async | json}}
-</p>
+<app-spinner *ngIf="loading$ | async"></app-spinner>
+{{ (team$ | async) }}
+<div class="container" *ngIf="!(team$ | async)">
+  <div class="team-picker">
+    <h3>Select your team</h3>
+    <br>
+    <md-select [floatPlaceholder]="'never'" placeholder="Select your team" (change)="setTeam($event.value)">
+      <md-option *ngFor="let team of teams$ | async" [value]="team.name">{{team.name}}</md-option>
+    </md-select>  
+  </div>
+  <br>
+</div>

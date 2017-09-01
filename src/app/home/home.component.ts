@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 
 import { HomeSandbox } from './home.sandbox';
 
-import { TeamsService } from '../shared/async/teams.service';
 import { Team, TeamMember } from '../teams/team.model';
 
 @Component({
@@ -11,9 +10,18 @@ import { Team, TeamMember } from '../teams/team.model';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  public teams$;
+  public loading$ = this.sandbox.loading$;
+  public loaded$ = this.sandbox.loaded$;
+  public team$ = this.sandbox.defaultTeam$;
+  public teams$ = this.sandbox.teamsList$;
 
-  constructor(public HomeSandbox: HomeSandbox) { }
+  constructor(public sandbox: HomeSandbox) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.sandbox.loadHome();
+  }
+
+  setTeam(name) {
+    this.sandbox.setTeam(name);
+  }
 }

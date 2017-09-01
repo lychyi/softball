@@ -1,3 +1,33 @@
-<p>
-  standings works!
-</p>
+<app-spinner *ngIf="loading$ | async"></app-spinner>
+<div class="stats-table" *ngFor="let league of leagues">
+  <h2>{{league}}</h2>
+  <ngx-datatable
+    class="material"
+    style="font-size: 0.8em; width: 100%;"
+    [headerHeight]=35
+    [rows]="statsGroupedByLeague[league]"
+    [columns]="columns"
+    [columnMode]="'force'"
+    [rowHeight]=35
+    [scrollbarH]="true"
+    [sortType]="'multi'"
+    [sorts]="[{prop: 'winPercentage', dir: 'desc'}]"
+  >
+  </ngx-datatable>
+</div>
+
+<ng-template #toFixedPctTpl let-value="value">
+  {{ value | number:'1.3' | slice:1 }}
+</ng-template>
+<ng-template #toFixedTpl let-value="value">
+  {{ value | number:'1.2-2' }}
+</ng-template>
+<ng-template #posNegTpl let-value="value">
+  <span *ngIf="value > 0" style='color: green'>{{value}}</span>
+  <span *ngIf="value < 0" style='color: maroon'>{{value}}</span>
+</ng-template>
+<ng-template #streakTpl let-value="value">
+  <span *ngIf="value > 0" style='color: green'>WON {{abs(value)}}</span>
+  <span *ngIf="value < 0" style='color: maroon'>LOST {{abs(value)}}</span>
+  <span *ngIf="value == 0">N/A</span>
+</ng-template>

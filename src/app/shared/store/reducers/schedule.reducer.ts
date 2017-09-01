@@ -9,15 +9,17 @@ export interface State {
   loaded: boolean;
   failed: boolean;
   results: Game[];
-  filter: string;
+  originalResults: Game[];
+  filterTerm: string;
 }
 
 const INITIAL_STATE: State = {
   loading: false,
   loaded: false,
   failed: false,
-  filter: '',
-  results: []
+  filterTerm: '',
+  results: [],
+  originalResults: []
 };
 
 export function reducer(state = INITIAL_STATE, action: actions.Actions): State {
@@ -50,10 +52,16 @@ export function reducer(state = INITIAL_STATE, action: actions.Actions): State {
         results: []
       };
     }
-    case actions.ActionTypes.FILTER: {
+    case actions.ActionTypes.SET_FILTER_TERM: {
       return {
         ...state,
-        filter: action.payload
+        filterTerm: action.payload
+      };
+    }
+    case actions.ActionTypes.SET_FILTER_RESULTS: {
+      return {
+        ...state,
+        results: action.payload
       };
     }
     default: {

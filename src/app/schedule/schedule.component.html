@@ -1,23 +1,21 @@
-<div *ngIf="scheduleLoading$ | async" style="background-color: rgba(255,255,255,0.4); display: flex; justify-content: center; align-items: center; height: 100vh" class="progress-spinner-container">
-  <md-progress-spinner style="height: 48px; width: 48px;" [color]="'primary'" [mode]="'indeterminate'"></md-progress-spinner>
-</div>
-<md-toolbar>
+<app-spinner *ngIf="scheduleLoading$ | async"></app-spinner> 
+<h3>Playoffs!</h3>
+<md-toolbar *ngIf="false">
   <form [formGroup]="teamFilterFormGroup" class="team-filter-form">
-    <md-select placeholder="Filter by team" formControlName="filter" (change)="filterSchedule($event.value)">
+    <md-select placeholder="Filter by team" formControlName="filter" (change)="sandbox.filterSchedule($event.value)">
       <md-option [value]="''">All Teams</md-option>
       <md-option *ngFor="let team of teams$ | async" [value]="team.name">{{team.name}}</md-option>
     </md-select>  
   </form>
 </md-toolbar>
 <br>
-<div style="text-align: center; margin: 0 auto;">
-  <button md-raised-button (click)="scrollTo()" color="primary">{{'Jump to Next Game' | uppercase}}</button>  
+<div style="text-align: center; margin: 0 auto;" *ngIf="false">
+  <button md-raised-button (click)="scrollToNextDate()" color="primary">{{'Jump to Next Game' | uppercase}}</button>  
 </div>
-
-<div *ngFor="let date of scheduleDates$ | async">
+<div *ngFor="let date of displayScheduleDates$ | async">
   <h3 [attr.id]="date | replace:'/':'-'" class="schedule-date">{{date | date: 'EEEE'}}, {{date}}</h3>
-  <md-card *ngFor="let game of scheduleGroupByDates$.pluck(date) | async">
-    <md-card-subtitle>{{game.datetime | date: 'h'}}P {{game.location | uppercase}}</md-card-subtitle>
+  <md-card *ngFor="let game of displaySchedule$.pluck(date) | async">
+    <md-card-subtitle>{{game.datetime | date: 'h:mm'}}P {{game.location | uppercase}}</md-card-subtitle>
     <md-card-content>
       <table style="padding: 0px; margin: 0 auto;">
         <tr>

@@ -15,7 +15,9 @@ import { Team, TeamMember } from './team.model';
 @Injectable()
 export class TeamsSandboxService extends Sandbox {
   public teams$ = this.appState$.select(store.selectTeams);
+  public teamsGroupedByLeague$ = this.appState$.select(store.selectTeamsGroupedByLeague);
   public teamsLoading$ = this.appState$.select(store.selectTeamsLoading);
+  public leagues$ = this.appState$.select(store.selectTeamLeagues);
 
   constructor(
     protected appState$: Store<store.State>,
@@ -27,16 +29,5 @@ export class TeamsSandboxService extends Sandbox {
   // Loads teams into the store
   public loadTeams(): void {
     this.appState$.dispatch(new teamActions.LoadAction());
-
-    // Refactor this to an ngrx effects service
-    // Is this taken care of in effects?
-    // this.ts.getTeams()
-    //   .subscribe(teams => {
-    //     this.appState$.dispatch(new teamActions.LoadSuccessAction(teams));
-    //   },
-    //   (err) => {
-    //     this.appState$.dispatch(new teamActions.LoadFailAction());
-    //   }
-    // );
   }
 }

@@ -3,6 +3,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule } from '@angular/common';
 
+import { SpinnerModule } from '../shared/components/spinner.module';
+
 import {
   MdCardModule,
   MdButtonModule,
@@ -21,6 +23,7 @@ import { RosterDialogComponent } from './roster-dialog.component';
     BrowserModule,
     BrowserAnimationsModule,
     CommonModule,
+    SpinnerModule,
     MdCardModule,
     MdButtonModule,
     MdIconModule,

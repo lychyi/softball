@@ -17,6 +17,8 @@ import { Team, TeamMember } from './team.model';
 })
 export class TeamsComponent implements OnInit {
   public teams$: Observable<Team[]> = this.sandbox.teams$;
+  public leagues$: Observable<string[]> = this.sandbox.leagues$;
+  public teamsGroupedByLeague$: Observable<Team[]> = this.sandbox.teamsGroupedByLeague$;
   public teamsLoading$: Observable<Boolean> = this.sandbox.teamsLoading$;
 
   constructor(

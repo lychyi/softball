@@ -29,6 +29,10 @@ export class GameResult {
     }
   }
 
+  isInterleague(): boolean {
+    return this.home.league !== this.away.league;
+  }
+
   toString(): string {
     let output = '';
     let first;

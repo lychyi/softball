@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { HttpModule } from '@angular/http';
 
 import { FirebaseRestService } from './firebase-rest.service';
+import { ScheduleService } from './schedule.service';
+import { TeamsService } from './teams.service';
 
 @NgModule({
   imports: [
@@ -11,7 +13,9 @@ import { FirebaseRestService } from './firebase-rest.service';
   ],
   declarations: [],
   providers: [
-    FirebaseRestService
+    FirebaseRestService,
+    ScheduleService,
+    TeamsService
   ]
 })
 export class AsyncModule { }

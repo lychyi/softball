@@ -31,18 +31,23 @@ export class ScheduleService {
 
       scheduleKeys.forEach(key => {
         const game = scheduleResults[key];
-        schedule.push(new Game({
-          home: tt.getTeamByName(game.home),
-          away: tt.getTeamByName(game.away),
-          datetime: new Date(game.date).setHours(game.time),
-          location: game.field,
-          result: new GameResult({
-            home: tt.getTeamByName(game.home),
-            homeScore: game.homeScore !== '' ? game.homeScore : undefined,
-            away: tt.getTeamByName(game.away),
-            awayScore: game.awayScore !== '' ? game.awayScore : undefined
-          })
-        }));
+        const homeTeam = tt.getTeamByName(game.home);
+        const awayTeam = tt.getTeamByName(game.away);
+        const hour = game.hour ? game.hour : game.time;
+        if (!game.playoffs) {
+          schedule.push(new Game({
+            home: homeTeam,
+            away: awayTeam,
+            datetime: new Date(game.date).setHours(hour, game.minute ? game.minute : 0),
+            location: game.field,
+            result: new GameResult({
+              home: tt.getTeamByName(game.home),
+              homeScore: game.homeScore !== '' ? game.homeScore : undefined,
+              away: tt.getTeamByName(game.away),
+              awayScore: game.awayScore !== '' ? game.awayScore : undefined,
+            })
+          }));
+        }
       });
 
       return schedule;

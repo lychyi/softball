@@ -11,6 +11,8 @@ import {
   MdButtonModule
 } from '@angular/material';
 
+import { SpinnerModule } from '../shared/components/spinner.module';
+
 import { Ng2PageScrollModule } from 'ng2-page-scroll';
 import { ScheduleSandboxService } from './schedule-sandbox.service';
 import { ScheduleService } from '../shared/async/schedule.service';
@@ -29,11 +31,12 @@ import { ReplacePipe } from '../shared/utility/replace.pipe';
     MdCardModule,
     MdIconModule,
     MdButtonModule,
+    SpinnerModule,
     Ng2PageScrollModule.forRoot()
   ],
   declarations: [
     ScheduleComponent,
-    ReplacePipe
+    ReplacePipe,
   ],
   providers: [
     ScheduleSandboxService,

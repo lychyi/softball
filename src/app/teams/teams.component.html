@@ -1,10 +1,11 @@
-<div *ngIf="teamsLoading$ | async" style="background-color: rgba(255,255,255,0.4); display: flex; justify-content: center; align-items: center; height: 100vh" class="progress-spinner-container">
-  <md-progress-spinner style="height: 48px; width: 48px;" [color]="'primary'" [mode]="'indeterminate'"></md-progress-spinner>
-</div>
+<app-spinner *ngIf="teamsLoading$ | async"></app-spinner>
 
-<app-team-card 
-  *ngFor="let team of teams$ | async" 
-  [team]="team" 
-  (onViewRoster)="openRosterDialog(team.name, $event)"
-  (onViewUpcoming)="viewUpcomingGames(team.name)"
-></app-team-card>
+<div *ngFor="let league of leagues$ | async">
+  <h2>{{ league }}</h2>
+  <app-team-card 
+    *ngFor="let team of teamsGroupedByLeague$.pluck(league) | async" 
+    [team]="team" 
+    (onViewRoster)="openRosterDialog(team.name, $event)"
+    (onViewUpcoming)="viewUpcomingGames(team.name)"
+  ></app-team-card> 
+</div>
